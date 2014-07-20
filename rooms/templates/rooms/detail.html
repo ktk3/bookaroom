@@ -1,0 +1,29 @@
+<html>
+<head>
+	<title>Book a Room</title>	
+	{% load staticfiles %}
+	<link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+</head>
+<body>
+<h1>{{ room.name }}</h1>
+<h3>{{ room.description}}</h3>
+<ul>
+{% for slot in room.free_slots.all %}
+    <li>{{ slot }}</li>
+{% endfor %}
+</ul>
+
+<h1>{{ room.name }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{% url 'book_a_room' room.id %}" method="post">
+{% csrf_token %}
+{% for slot in room.free_slots.all %}
+    <input type="radio" name="slot" id="slot{{ forloop.counter }}" value="{{ slot.id }}" />
+    <label for="slot{{ forloop.counter }}">{{ slot }}</label><br />
+{% endfor %}
+<input type="submit" value="Choose" />
+</form>
+</body>
+</html>
