@@ -10,15 +10,22 @@
 <input type="button" class="btn btn-primary btn-lg" value="Add new position" onclick="location.href='positions?new';">
 {% if rooms_list %}
     <table class="table table-striped">
-    {% for room in rooms_list %}
+    <tr>
+    	<th>Name</th>
+    	<th>Capacity</th>
+    	<th>Descriptiom</th>
+    </tr>
+    	{% for room in rooms_list %}
         <tr>
         	<td><a href="{% url 'detail' room.id %}">{{ room.name }}</a></td>
+        	<td>{{ room.capacity }}</td>
+        	<td>{{ room.description }}</td>       	
         </tr>
     {% endfor %}
     </table>
 {% else %}
     <p>No rooms are available.</p>
 {% endif %}
-</div>div>
+</div>
 </body>
 </html>
