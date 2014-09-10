@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import datetime, date
 
 class Room(models.Model):
     name = models.CharField(max_length=20)
@@ -19,3 +20,34 @@ class FreeSlot(models.Model):
  
     def __unicode__(self):
         return "{} {} {}-{}".format(self.room.name, self.date, self.begin_time, self.end_time)
+
+    def save(self, *args, **kwargs):
+        self.begin_time=self.begin_time.replace(second=0)
+        if self.begin_time.minute < 15:
+            self.begin_time=self.begin_time.replace(minute=0)
+        else:
+            if self.begin_time.minute < 30:
+                self.begin_time=self.begin_time.replace(minute=15)
+            else: 
+                if self.begin_time.minute < 45:
+                    self.begin_time=self.begin_time.replace(minute=30)
+                else: 
+                    self.begin_time=self.begin_time.replace(minute=45)
+        if self.end_time.second > 0: 
+            if self.end_time.minute == 59:
+                self.end_time=self.end_time.replace(hour=self.end_time.hour+1, minute=0, second=0)
+            else:
+                self.end_time=self.end_time.replace(minute=self.end_time.minute+1, second=0)
+        if self.end_time.minute > 45:
+            self.end_time=self.end_time.replace(hour=self.end_time.hour+1, minute=0)
+        else:
+            if self.end_time.minute > 30:
+                self.end_time=self.end_time.replace(minute=45)
+            else:
+                if self.end_time.minute > 15:
+                    self.end_time=self.end_time.replace(minute=30)
+                else:
+                    if self.end_time.minute > 0:
+                        self.end_time=self.end_time.replace(minute=15)
+        super(FreeSlot, self).save(*args, **kwargs)
+
