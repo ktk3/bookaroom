@@ -1,11 +1,17 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404
 from rooms.models import *
 
+def signin(request):
+    return render(request, 'login.html')
+
 def index(request):
-    rooms_list = Room.objects.all().order_by('name')
-    context = {'rooms_list': rooms_list}
-    return render(request, 'rooms/index.html', context)
+    if request.user.is_authenticated():
+        rooms_list = Room.objects.all().order_by('name')
+        context = {'rooms_list': rooms_list}
+        return render(request, 'rooms/index.html', context)
+    else:
+        return redirect('/')
 
 def detail(request, room_id):
     room = get_object_or_404(Room, pk=room_id)
@@ -23,6 +29,10 @@ def detail2(request, room_name):
 
 def book(request, room_id):
     return HttpResponse("You're voting on poll %s." % poll_id)
+
+
+
+
 
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse

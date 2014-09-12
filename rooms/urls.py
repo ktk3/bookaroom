@@ -4,7 +4,7 @@ from rooms import views
 
 urlpatterns = patterns('',
     # ex: /rooms/
-    url(r'^$', views.index, name='index'),
+    url(r'^$', views.index, name='rooms'),
     # ex: /polls/English/results/
     url(r'^(?P<room_id>\d+)/results/$', views.results, name='results'),
     # ex: /rooms/5/

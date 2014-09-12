@@ -1,10 +1,5 @@
-<html>
-<head>
-	<title>Book a Room</title>
-	{% load staticfiles %}
-	<link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
-</head>
-<body>
+{% extends 'base.html' %}
+{% block content %}
 <h1>List of rooms</h1>
 <div class="container">
 <input type="button" class="btn btn-primary" value="Add new position" onclick="location.href='positions?new';">
@@ -27,5 +22,4 @@
     <p>No rooms are available.</p>
 {% endif %}
 </div>
-</body>
-</html>
+{% endblock %}
