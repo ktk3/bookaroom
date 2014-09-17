@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Bookaroom App: Room {{ room.name }}{% endblock%}
+{% block content %}
+<div class="container">
+<h1>{{ room.name }}</h1>
+
+<h3>{{ room.description}}</h3>
+<table class="table table-striped">
+    <tr>
+        <th>Date</th>
+        <th>From</th>
+        <th>To</th>
+    </tr>
+    {% for slot in room.free_slots.all %}
+    <tr>
+        <td>{{ slot.date }}</td>
+        <td>{{ slot.begin_time }}</td>
+        <td>{{ slot.end_time }}</td>         
+    </tr>
+    {% endfor %}
+</table>
+<input type="button" class="btn btn-primary" value="Book this room" onclick="{% url 'book_a_room' room.id %}">
+</div>
+{% endblock %}

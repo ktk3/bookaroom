@@ -2,8 +2,6 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404
 from rooms.models import *
 
-def signin(request):
-    return render(request, 'login.html')
 
 def index(request):
     if request.user.is_authenticated():
@@ -15,7 +13,7 @@ def index(request):
 
 def detail(request, room_id):
     room = get_object_or_404(Room, pk=room_id)
-    return render(request, 'rooms/detail.html', {'room': room})
+    return render(request, 'rooms/room_detail.html', {'room': room})
 
 # def detail(request, poll_id):
 #     poll = get_object_or_404(Poll, pk=room_id)
@@ -30,10 +28,6 @@ def detail2(request, room_name):
 def book(request, room_id):
     return HttpResponse("You're voting on poll %s." % poll_id)
 
-
-
-
-
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
@@ -42,7 +36,7 @@ def book_a_room(request, room_id):
     try:
     	print p;
             #      selected_slot = p.free_slots.all".get(pk=request.POST['slot'])
-    except (KeyError, FreeSlot.DoesNotExist):
+    except (KeyError, TimeSlot.DoesNotExist):
         # Redisplay the poll voting form.
         return render(request, 'rooms/detail.html', {
             'room': p,

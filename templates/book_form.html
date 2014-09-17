@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<form action="{% url 'book' %}" method="POST" class="container form-inline" role="form">
+  {% csrf_token %}
+	<table class="table table-striped">
+    <tr>
+    	<th>Select room</th>
+    	<th>Date</th>
+    	<th>Begin time</th>
+    	<th>End time</th>
+    </tr>
+ 	<tr>
+ 		<th><div class="form-group">
+    		<select class="form-control" name="input_room">
+		   	{% for room in rooms %}
+     		  	<option>{{ room.name }}</option>     	
+   			{% endfor %}
+			</select>	
+  		</div></th>
+  		<th><div class="form group">
+     		<input class="form-control" type="date" name="input_date">
+  		</div></th>
+  		<th><div class="form group">
+     		<input class="form-control" type="time" name="input_begin">
+  		</div></th>
+  		<th><div class="form group">
+     		<input class="form-control" type="time" name="input_end">
+  		</div></th>
+	</table>
+	  <input type="submit" class="btn btn-success form-control" value="Check availability">
+</form>
+
+</div>
+{% endblock %}

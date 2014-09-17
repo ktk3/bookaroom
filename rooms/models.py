@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime, date
+from django.core.exceptions import ValidationError
 
 class Room(models.Model):
     name = models.CharField(max_length=20)
@@ -10,9 +11,9 @@ class Room(models.Model):
         return "{} {}".format(self.name, self.capacity)
     
     def free_slots(self):
-        return FreeSlot.objects.filter(room=self)
+        return TimeSlot.objects.filter(room=self)
 
-class FreeSlot(models.Model):
+class TimeSlot(models.Model):
     room = models.ForeignKey(Room)
     date = models.DateField()
     begin_time = models.TimeField()
@@ -49,5 +50,14 @@ class FreeSlot(models.Model):
                 else:
                     if self.end_time.minute > 0:
                         self.end_time=self.end_time.replace(minute=15)
-        super(FreeSlot, self).save(*args, **kwargs)
+        self.clean()
+        super(TimeSlot, self).save(*args, **kwargs)
 
+    def clean(self):
+        if self.begin_time >= self.end_time:
+            raise ValidationError('Incorrect timespan')
+        slots_set = TimeSlot.objects.filter(room=self.room, date=self.date)
+        slots_set = slots_set.exclude(begin_time__gte=self.end_time)
+        slots_set = slots_set.exclude(end_time__lte=self.begin_time)
+        if slots_set.count() > 0:
+            raise ValidationError('Overlapping free slots')
