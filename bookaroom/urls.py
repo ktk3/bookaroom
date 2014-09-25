@@ -8,9 +8,6 @@ admin.autodiscover()
 import views
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'bookaroom.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
     url(r'^$', views.rooms, name='rooms'),
     url(r'^login', views.signin, name='login'),
     url(r'^logout', views.signout, name='logout'),

@@ -46,9 +46,16 @@
     <div class="alert alert-danger" role="alert">{{ message }}</div>
     {% endfor %}
 {% endif %}
-
+{% if user.is_authenticated %}
 {% block content %}
 {% endblock %}
+{% else %}
+<div class="container">
+    <h2>Welcome to Book a Room App</h2>
+    You need to sign in.
+    <h3>sign in or create new account</h3>
+</div>
+{% endif %}
 <hr>
 </body>
 </html>

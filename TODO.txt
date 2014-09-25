@@ -1,4 +1,3 @@
-create base.html -- a wrapper page, move base.html to index.html
 function to book and/or unbook room
 add index page where you either login or create new user
 add account mngmnt where you can see your booked slots and unbook them

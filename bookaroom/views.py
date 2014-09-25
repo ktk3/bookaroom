@@ -9,11 +9,16 @@ def rooms(request):
     return render(request, 'index.html')
 
 def book(request):
-    input_room = request.POST['input_room']
+    room_id = request.POST['input_room']
+    input_room = Room.objects.get(id=room_id)
     input_date = request.POST['input_date']
     input_begin = request.POST['input_begin']
-    context = {'input_room': input_room, 'input_date': input_date, 
-        'input_begin': input_begin}
+    input_end = request.POST['input_end']
+    availabile = TimeSlot.objects.all().filter(room=input_room, date=input_date)
+    availabile = availabile.exclude(begin_time__gte = input_begin)
+    availabile = availabile.exclude(end_time__lte = input_end)
+    context = {'availabile': availabile}
+    #TODO create new slots if user wants to book
     return render(request, 'book.html', context)
 
 def book_form(request):

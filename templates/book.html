@@ -1,6 +1,24 @@
 {% extends 'base.html' %}
 {% block content %}
-To book or not to book
-{{ input_room }}
-{{ input_begin }}
+<div class="container">
+{% if availabile %}
+	Free slot is available:
+    	{% for slot in availabile %}
+    	<ul>
+            <li> <a href="{% url 'slot_detail' slot.id %}">{{ slot.id }}</a></li>
+        	<li> {{ slot.room }}</li>
+        	<li> {{ slot.date }}</li>
+        	<li> {{ slot.begin_time }}</li>  
+            <li> {{ slot.end_time }}</li>
+        </ul>
+    {% endfor %}
+    {{ availabile }}
+    <div class="clearfix"></div>
+    <button type="submit" class="btn btn-success btn-lg">Book</button>
+
+{% else %}
+    <p>Sorry, no free time slot available.</p>
+{% endif %}
+<div>
+
 {% endblock %}

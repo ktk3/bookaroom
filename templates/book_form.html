@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
-{% block content %}
 
+{% block content %}
+{% load staticfiles %}
+<script type="text/javascript" src="{% static 'js/input_validation.js' %}"></script>
 <form action="{% url 'book' %}" method="POST" class="container form-inline" role="form">
   {% csrf_token %}
+  <div class="alert alert-danger fade-in" id="messg" style="display:none;"></div>
 	<table class="table table-striped">
     <tr>
     	<th>Select room</th>
@@ -14,22 +17,22 @@
  		<th><div class="form-group">
     		<select class="form-control" name="input_room">
 		   	{% for room in rooms %}
-     		  	<option>{{ room.name }}</option>     	
+     		  	<option value="{{ room.id }}">{{ room.name }}</option>     	
    			{% endfor %}
 			</select>	
   		</div></th>
   		<th><div class="form group">
-     		<input class="form-control" type="date" name="input_date">
+     		<input class="form-control" type="date" name="input_date" onchange="isValidDate(this.form)">
   		</div></th>
   		<th><div class="form group">
-     		<input class="form-control" type="time" name="input_begin">
+     		<input class="form-control" type="time" name="input_begin"
+        onchange="isValidHour(this.form, 'input_begin')">
   		</div></th>
   		<th><div class="form group">
-     		<input class="form-control" type="time" name="input_end">
+     		<input class="form-control" type="time" name="input_end"
+        onchange="isValidHour(this.form, 'input_end')">
   		</div></th>
 	</table>
 	  <input type="submit" class="btn btn-success form-control" value="Check availability">
 </form>
-
-</div>
 {% endblock %}
