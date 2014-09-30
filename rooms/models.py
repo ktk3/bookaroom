@@ -13,6 +13,14 @@ class Room(models.Model):
     def free_slots(self):
         return TimeSlot.objects.filter(room=self)
 
+    def clean(self):
+        if self.capacity <= 0:
+            raise ValidationError('Room capacity has to be > 0')
+
+    def save (self, *args, **kwargs):
+        self.clean()
+        super(Room, self).save(*args, **kwargs)
+
 class TimeSlot(models.Model):
     room = models.ForeignKey(Room)
     date = models.DateField()
@@ -61,3 +69,17 @@ class TimeSlot(models.Model):
         slots_set = slots_set.exclude(end_time__lte=self.begin_time)
         if slots_set.count() > 0:
             raise ValidationError('Overlapping free slots')
+
+    def book(self, begin, end):
+        #verify arguments
+        if begin >= end :
+            raise ValidationError('Incorrect timespan')
+        if begin < self.begin_time or end > self.end_time:
+            raise ValidationError('Time not within timeslot')
+        self.delete()
+        #check if there is time left in TimeSlot
+        if begin > self.begin_time:
+            TimeSlot.objects.create(room=self.room, date=self.date, begin_time=self.begin_time, end_time=begin)
+        if end < self.end_time:
+            TimeSlot.objects.create(room=self.room, date=self.date, begin_time=end, end_time=self.end_time)
+

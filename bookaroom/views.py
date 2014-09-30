@@ -4,21 +4,40 @@ from django.contrib.auth import logout, authenticate, login
 from django.contrib import messages
 from rooms.models import *
 from rooms.validators import *
+from datetime import time, date
 
 def rooms(request):
     return render(request, 'index.html')
 
-def book(request):
+def confirm_book(request):
     room_id = request.POST['input_room']
     input_room = Room.objects.get(id=room_id)
     input_date = request.POST['input_date']
     input_begin = request.POST['input_begin']
     input_end = request.POST['input_end']
     availabile = TimeSlot.objects.all().filter(room=input_room, date=input_date)
-    availabile = availabile.exclude(begin_time__gte = input_begin)
-    availabile = availabile.exclude(end_time__lte = input_end)
-    context = {'availabile': availabile}
-    #TODO create new slots if user wants to book
+    availabile = availabile.exclude(begin_time__gt = input_begin)
+    availabile = availabile.exclude(end_time__lt = input_end)
+    slot = []
+    if availabile.count() == 1:
+        slot = availabile[0]
+    context = {'slot': slot, 'begin': input_begin, 'end': input_end}
+    return render(request, 'confirm_book.html', context)
+
+def book(request):
+    #TODO with atomic here!!!!
+    slot_id = request.POST['slot_id']
+    slot = TimeSlot.objects.get(id=slot_id)
+    begin = request.POST['begin']
+    end = request.POST['end']
+    begin_parts = begin.split(':')
+    begin_h = int(begin_parts[0])
+    begin_m = int(begin_parts[1])
+    end_parts = end.split(':')
+    end_h = int(end_parts[0])
+    end_m = int(end_parts[1])
+    slot.book(time(begin_h, begin_m), time(end_h, end_m))
+    context = {'slot': slot, 'begin': begin, 'end': end}
     return render(request, 'book.html', context)
 
 def book_form(request):
@@ -36,7 +55,7 @@ def find_rooms(request):
 
 def slots(request):
     if request.user.is_authenticated():
-        slots_list = TimeSlot.objects.all().order_by('room')
+        slots_list = TimeSlot.objects.all().order_by('room', 'date', 'begin_time')
         context = {'slots_list': slots_list}
         return render(request, 'slots.html', context)
     else:
@@ -63,4 +82,3 @@ def signin(request):
     else:
         messages.error(request, 'Incorrect userame or password')
     return redirect('/')
-

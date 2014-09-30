@@ -3,7 +3,7 @@
 {% block content %}
 {% load staticfiles %}
 <script type="text/javascript" src="{% static 'js/input_validation.js' %}"></script>
-<form action="{% url 'book' %}" method="POST" class="container form-inline" role="form">
+<form action="{% url 'confirm_book' %}" method="POST" class="container form-inline" role="form">
   {% csrf_token %}
   <div class="alert alert-danger fade-in" id="messg" style="display:none;"></div>
 	<table class="table table-striped">

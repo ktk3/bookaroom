@@ -3,3 +3,4 @@ add index page where you either login or create new user
 add account mngmnt where you can see your booked slots and unbook them
 add searching for free slots -- by date, hour, room capacity etc
 MAIN PAGE -- sign in or create new account
+when saving a new TimeSlot check if it can be merged with another slot

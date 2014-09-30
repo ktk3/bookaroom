@@ -59,7 +59,7 @@ function isValidHour(form, name)
       if (name == 'input_begin')
         form.input_begin.style.backgroundColor = '#fba';
       else form.input_end.style.backgroundColor = '#fba';
-      document.getElementById('messg').innerHTML = "Input hour in format hh:mm";
+      document.getElementById('messg').innerHTML = "Hour must be in HH:MM format";
       document.getElementById('messg').style.display = 'inline-flex';
     }
     else{

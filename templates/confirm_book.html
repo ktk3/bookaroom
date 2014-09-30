@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+{% if slot %}
+<ul>
+    <li> <a href="{% url 'slot_detail' slot.id %}">{{ slot.id }}</a></li>
+    <li> {{ slot.room }}</li>
+    <li> {{ slot.date }}</li>
+    <li> {{ slot.begin_time }}</li>  
+    <li> {{ slot.end_time }}</li>
+</ul>
+    <form action="{% url 'book' %}" method="POST" class="container form-inline" role="form">
+    {% csrf_token %}
+        <input class="form-control" type="hidden" value="{{ slot.id }}" name="slot_id">
+        <input class="form-control" type="hidden" value="{{ begin }}" name="begin">
+        <input class="form-control" type="hidden" value="{{ end }}" name="end">
+        <input type="submit" class="btn btn-success form-control" value="Confirm">
+    </form>
+{% else %}
+    <p>Sorry, no free time slot available.</p>
+{% endif %}
+<div>
+{% endblock %}

@@ -19,6 +19,6 @@
     </tr>
     {% endfor %}
 </table>
-<input type="button" class="btn btn-primary" value="Book this room" onclick="{% url 'book_a_room' room.id %}">
+<input type="button" class="btn btn-primary" value="Book this room" onclick="{% url 'book_form' room.id %}">
 </div>
 {% endblock %}
