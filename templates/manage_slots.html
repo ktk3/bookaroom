@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>List of your booked slots</h1>
+<div class="container">
+<input type="button" class="btn btn-primary" value="Book new slot" onclick="location.href='/book_form';">
+{% if booked_slots %}
+    <table class="table table-striped">
+    <tr>
+    	<th>Room</th>
+    	<th>Date</th>
+    	<th>Begin time</th>
+        <th>End time</th>
+        <th></th>
+    </tr>
+    	{% for slot in booked_slots %}
+        <tr>
+        	<td>{{ slot.room }}</td>
+        	<td>{{ slot.date }}</td>
+        	<td>{{ slot.begin_time }}</td>   
+            <td>{{ slot.end_time }}</td>
+            <td><input type="button" class="btn btn-danger" value="Unbook" onclick="location.href='{% url 'unbook' slot.id %}';"></td>  	
+        </tr>
+    {% endfor %}
+    </table>
+{% else %}
+    <p>You have not booked any slots.</p>
+{% endif %}
+</div>
+{% endblock %}

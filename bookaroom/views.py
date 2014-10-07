@@ -6,6 +6,8 @@ from rooms.models import *
 from rooms.validators import *
 from datetime import time, date
 
+from django.contrib.auth.models import User
+
 def rooms(request):
     return render(request, 'index.html')
 
@@ -36,7 +38,10 @@ def book(request):
     end_parts = end.split(':')
     end_h = int(end_parts[0])
     end_m = int(end_parts[1])
-    slot.book(time(begin_h, begin_m), time(end_h, end_m))
+    begin = time(begin_h, begin_m)
+    end = time(end_h, end_m)
+    book_new_slot(slot, request.user, begin, end)
+    messages.success(request, 'Your reservation is booked')
     context = {'slot': slot, 'begin': begin, 'end': end}
     return render(request, 'book.html', context)
 
@@ -44,6 +49,16 @@ def book_form(request):
     rooms = Room.objects.all()
     context = {'rooms': rooms}
     return render(request, 'book_form.html', context)
+
+def unbook(request, slot_id):
+    slot = BookedTimeSlot.objects.get(id=slot_id)
+    slot.unbook()
+    return redirect('/manage_slots')
+
+def manage_slots(request):
+    booked_slots = BookedTimeSlot.objects.filter(user=request.user)
+    context = {'booked_slots': booked_slots}
+    return render(request, 'manage_slots.html', context)
 
 def find_slots(request):
     rooms = Room.objects.all()
@@ -82,3 +97,20 @@ def signin(request):
     else:
         messages.error(request, 'Incorrect userame or password')
     return redirect('/')
+
+def logon(request):
+    if request.user.is_authenticated():
+        return redirect('/')
+    else:
+        return render(request, 'login.html')
+
+def new_user(request):
+    return render(request, 'new_user.html')
+
+def create_user(request):
+    username = request.POST['username']
+    email = request.POST['email']
+    password = request.POST['password']
+    User.objects.create_user(username=username, email=email, password=password)
+    messages.success(request, 'Your account have been created. You can signin now.')
+    return render(request, 'login.html')

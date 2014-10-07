@@ -27,10 +27,12 @@ function isValidDate(form)
       form.input_date.style.backgroundColor = '#fba';
       document.getElementById('messg').innerHTML = "Date must be in YYYY-MM-DD format";
       document.getElementById('messg').style.display = 'inline-flex';
+      return false;
     }
     else{
       document.getElementById('messg').style.display = 'none';
       form.input_date.style.backgroundColor = '#FFF';
+      return true;
     }
 };
 
@@ -61,12 +63,80 @@ function isValidHour(form, name)
       else form.input_end.style.backgroundColor = '#fba';
       document.getElementById('messg').innerHTML = "Hour must be in HH:MM format";
       document.getElementById('messg').style.display = 'inline-flex';
+      return false;
     }
     else{
       document.getElementById('messg').style.display = 'none';
       if (name == 'input_begin')
         form.input_begin.style.backgroundColor = '#fff';
       else form.input_end.style.backgroundColor = '#fff';
+      return true;
+    }
+  }
+  return false;
+};
+
+function checkBookForm()
+{
+  form = document.getElementById('inputForm');
+  var isValid = isValidDate(form);
+  if (isValid){
+    isValid = isValidHour(form, 'input_begin');
+    if (isValid){
+      isValidHour(form, 'input_end');  
+      if (isValid){
+        isValid = form.input_end.value > form.input_begin.value
+        if (isValid){
+          form.submit();
+        }
+        else{
+          document.getElementById('messg').innerHTML = "Incorrect timespan";
+          document.getElementById('messg').style.display = 'inline-flex';
+        }
+      }
+    }
+  }
+};
+
+function checkForm(form)
+{
+  if (form == "inputForm"){
+    form = document.getElementById('inputForm');
+  }
+  //check email and password 
+  var emailString = form.email.value;
+  var isValid = (emailString == '') || /\S+@\S+\.\S+/.test(emailString);
+  if (!isValid){
+    form.email.style.backgroundColor = '#fba';
+    document.getElementById('messg').innerHTML = "Enter valid email address";
+    document.getElementById('messg').style.display = 'inline-flex';
+    return false;
+  }
+  else{
+
+    var psswrdStr = form.password.value;
+    var repsswrdStr = form.repassword.value;
+    if (psswrdStr == ''){
+      form.password.value = '';
+      form.repassword.value = '';
+      document.getElementById('messg').innerHTML = "Password cannot be empty";
+      document.getElementById('messg').style.display = 'inline-flex';
+      return false;
+    }
+    isValid = psswrdStr == repsswrdStr;
+    if (!isValid){
+      form.password.value = '';
+      form.repassword.value = '';
+      document.getElementById('messg').innerHTML = "Passwords do not match";
+      document.getElementById('messg').style.display = 'inline-flex';
+      return false;
+    }
+    else{
+      document.getElementById('messg').style.display = 'none';
+      form.email.style.backgroundColor = '#fff';
+      console.log('submit');
+      form.submit();
+      
     }
   }
 };

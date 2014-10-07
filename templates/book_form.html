@@ -3,7 +3,7 @@
 {% block content %}
 {% load staticfiles %}
 <script type="text/javascript" src="{% static 'js/input_validation.js' %}"></script>
-<form action="{% url 'confirm_book' %}" method="POST" class="container form-inline" role="form">
+<form action="{% url 'confirm_book' %}" method="POST" class="container form-inline" role="form" id="inputForm">
   {% csrf_token %}
   <div class="alert alert-danger fade-in" id="messg" style="display:none;"></div>
 	<table class="table table-striped">
@@ -22,17 +22,17 @@
 			</select>	
   		</div></th>
   		<th><div class="form group">
-     		<input class="form-control" type="date" name="input_date" onchange="isValidDate(this.form)">
+     		<input class="form-control" type="date" name="input_date" onchange="isValidDate(this.form) " required>
   		</div></th>
   		<th><div class="form group">
      		<input class="form-control" type="time" name="input_begin"
-        onchange="isValidHour(this.form, 'input_begin')">
+        onchange="isValidHour(this.form, 'input_begin')" required>
   		</div></th>
   		<th><div class="form group">
      		<input class="form-control" type="time" name="input_end"
-        onchange="isValidHour(this.form, 'input_end')">
+        onchange="isValidHour(this.form, 'input_end')" required>
   		</div></th>
 	</table>
-	  <input type="submit" class="btn btn-success form-control" value="Check availability">
 </form>
+<button class="btn btn-success col-md-offset-2" onclick="checkBookForm()">Check availability</button>
 {% endblock %}

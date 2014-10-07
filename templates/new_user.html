@@ -1,0 +1,23 @@
+{% extends 'unauth_base.html' %}
+{% block unauth_content %}
+{% load staticfiles %}
+<script type="text/javascript" src="{% static 'js/input_validation.js' %}"></script>
+<div class="container">
+<div class="row">
+<div class="col-sm-6 col-md-4 col-md-offset-4">
+<h2 class="text-center login-title">Enter username, your email and password to create a new account</h2>
+ <div class="alert alert-danger fade-in" id="messg" style="display:none;"></div>
+    <form class="form-signin" action="{% url 'create_user' %}" method="POST" id="inputForm">
+        {% csrf_token %}
+        <input type="text" name="username" class="form-control" placeholder="Enter username">
+        <input type="email" name="email" class="form-control" placeholder="Enter email">
+        <input type="password" name="password" class="form-control" placeholder="Password" required>
+        <input type="password" name="repassword" class="form-control" placeholder="Re-type password">
+    </form>
+    <button class="btn btn-primary btn-block" onclick="checkForm(inputForm)">Create account</button>
+</div>
+</div>
+</div>
+{% endblock %}
+
+
