@@ -3,3 +3,20 @@ remove Link Link from navbar
 add searching
 add links to booked slots and book new slot to navbar
 manage 'with atomic' -- to ensure commit security
+remove validators.py?
+clean up urls
+remove room/urls.py & rooms/templates?
+change book.html to display booked slot? "you've booked a slot" as a message
+maybe change login.html -- the text is too large
+decide on rooms/views.py
+make try catch blocks in "get":
+rooms/tests.py
+rooms/validators.py
+bookaroom/views.py
+
+set up test views in test (two sessions, two users)
+
+errors:
+two users saving the same slot: Exception Type: DoesNotExist  "Sorry someone booked the slot or part of it, you may try again, maybe your desired date is still availabale"
+
+VALIDATE INPUT DATA ON SERVER SIDE TOO -- user can have js turned off

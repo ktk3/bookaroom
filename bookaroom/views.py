@@ -5,7 +5,7 @@ from django.contrib import messages
 from rooms.models import *
 from rooms.validators import *
 from datetime import time, date
-
+from django.db import IntegrityError
 from django.contrib.auth.models import User
 
 def rooms(request):
@@ -29,7 +29,11 @@ def confirm_book(request):
 def book(request):
     #TODO with atomic here!!!!
     slot_id = request.POST['slot_id']
-    slot = TimeSlot.objects.get(id=slot_id)
+    try:
+        slot = TimeSlot.objects.get(id=slot_id)
+    except (KeyError, TimeSlot.DoesNotExist):
+        messages.error(request, 'Sorry someone booked the slot or part of it, you may try again, maybe your desired date is still availabale')
+        return redirect('/book_form')
     begin = request.POST['begin']
     end = request.POST['end']
     begin_parts = begin.split(':')
@@ -40,10 +44,14 @@ def book(request):
     end_m = int(end_parts[1])
     begin = time(begin_h, begin_m)
     end = time(end_h, end_m)
-    book_new_slot(slot, request.user, begin, end)
-    messages.success(request, 'Your reservation is booked')
-    context = {'slot': slot, 'begin': begin, 'end': end}
-    return render(request, 'book.html', context)
+    try:
+        book_new_slot(slot, request.user, begin, end)
+        messages.success(request, 'Your reservation is booked')
+        context = {'slot': slot, 'begin': begin, 'end': end}
+        return render(request, 'book.html', context)
+    except(ValidationError):
+        messages.error(request, 'Sorry someone booked the slot or part of it, you may try again, maybe your desired date is still availabale')
+        return redirect('/book_form')
 
 def book_form(request):
     rooms = Room.objects.all()
@@ -111,6 +119,12 @@ def create_user(request):
     username = request.POST['username']
     email = request.POST['email']
     password = request.POST['password']
-    User.objects.create_user(username=username, email=email, password=password)
-    messages.success(request, 'Your account have been created. You can signin now.')
-    return render(request, 'login.html')
+    try:
+        User.objects.create_user(username=username, email=email, password=password)
+        messages.success(request, 'Your account have been created. You can signin now.')
+        return render(request, 'login.html')
+    except IntegrityError:
+        messages.error(request, 'That username is taken. Choose another.')
+        return render(request, 'new_user.html')
+
+    

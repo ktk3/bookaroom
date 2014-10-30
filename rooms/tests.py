@@ -8,6 +8,9 @@ from django.contrib.auth.models import User
 class ModelsConstructorsTests(TestCase):
     def setUp(self):
         #populate database with simple data
+        r = Room.objects.get(name="TestRoom")
+        if r:
+            r.delete()
         Room(name="TestRoom", capacity=20).save()
         User.objects.create_user(username='DummyUser', email='', password='x')
 
@@ -92,6 +95,9 @@ class ModelsConstructorsTests(TestCase):
 class BookTimeSlotTests(TestCase):
     def setUp(self):
         #populate database with simple data
+        r = Room.objects.get(name="TestRoom")
+        if r:
+            r.delete()
         room1 = Room(name="TestRoom", capacity=20)
         room1.save()
         TimeSlot(room = room1, date = date(2014, 07, 10), begin_time = time(9, 00, 00), end_time = time(17,00,00)).save()
@@ -147,6 +153,9 @@ class BookTimeSlotTests(TestCase):
 class BookFunctionsTests(TestCase):
     def setUp(self):
         #populate database with simple data
+        r = Room.objects.get(name="TestRoom")
+        if r:
+            r.delete()
         room1 = Room(name="TestRoom", capacity=20)
         room1.save()
         TimeSlot(room = room1, date = date(2014, 07, 10), begin_time = time(9, 00, 00), end_time = time(17,00,00)).save()
@@ -209,6 +218,9 @@ class BookFunctionsTests(TestCase):
 
 class JointAdjacentSlotsTests(TestCase):
     def setUp(self):
+        r = Room.objects.get(name="TestRoom")
+        if r:
+            r.delete()
         room1 = Room(name="TestRoom", capacity=20)
         room1.save()
         User.objects.create_user(username='DummyUser', email='', password='x')
@@ -266,6 +278,9 @@ class JointAdjacentSlotsTests(TestCase):
 class MoreBookTests(TestCase):
     def setUp(self):
         #populate database with simple data
+        r = Room.objects.get(name="TestRoom")
+        if r:
+            r.delete()
         room1 = Room(name="TestRoom", capacity=20)
         room1.save()
         TimeSlot(room = room1, date = date(2014, 07, 10), begin_time = time(9), end_time = time(17)).save()
